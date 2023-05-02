@@ -1,6 +1,6 @@
 import { AuthService } from './auth/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
 import { filter, map, mergeMap } from 'rxjs';
 

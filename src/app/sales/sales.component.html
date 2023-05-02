@@ -15,7 +15,7 @@
         label="Reset"
         styleClass="p-button-outlined"
         icon="pi pi-filter-slash"
-        (click)="resetTable(dt)"
+        (click)="resetTable(dt, textInput)"
       ></p-button>
       <span class="p-input-icon-left ms-auto">
         <i class="pi pi-search"></i>
@@ -58,100 +58,54 @@
   </ng-template>
   <ng-template pTemplate="body" let-product let-editing="editing">
     <tr>
-      <td>{{ product.productID }}</td>
-      <td [pEditableColumn]="product.productName" pEditableColumnField="productName">
-        <p-cellEditor>
-          <ng-template pTemplate="input">
-            <input
-              placeholder="Product Name"
-              pInputText
-              type="text"
-              maxlength="50"
-              required
-              [(ngModel)]="product.productName"
-            />
-          </ng-template>
-          <ng-template pTemplate="output">
-            {{ product.productName }}
-          </ng-template>
-        </p-cellEditor>
-      </td>
-      <td [pEditableColumn]="product.salesQ1" pEditableColumnField="salesQ1">
-        <p-cellEditor>
-          <ng-template pTemplate="input">
-            <p-inputNumber
-              [min]="0"
-              [max]="9999999999999"
-              [format]="false"
-              [(ngModel)]="product.salesQ1"
-              placeholder="Sales Q1"
-              [required]="true"
-            ></p-inputNumber>
-          </ng-template>
-          <ng-template pTemplate="output">
-            {{ product.salesQ1 }}
-          </ng-template>
-        </p-cellEditor>
-      </td>
-      <td [pEditableColumn]="product.salesQ2" pEditableColumnField="salesQ2">
-        <p-cellEditor>
-          <ng-template pTemplate="input">
-            <p-inputNumber
-              [min]="0"
-              [max]="9999999999999"
-              [format]="false"
-              [(ngModel)]="product.salesQ2"
-              placeholder="Sales Q2"
-              [required]="true"
-            ></p-inputNumber>
-          </ng-template>
-          <ng-template pTemplate="output">
-            {{ product.salesQ2 }}
-          </ng-template>
-        </p-cellEditor>
-      </td>
-      <td [pEditableColumn]="product.salesQ3" pEditableColumnField="salesQ3">
-        <p-cellEditor>
-          <ng-template pTemplate="input">
-            <p-inputNumber
-              [min]="0"
-              [max]="9999999999999"
-              [format]="false"
-              [(ngModel)]="product.salesQ3"
-              placeholder="Sales Q3"
-              [required]="true"
-            ></p-inputNumber>
-          </ng-template>
-          <ng-template pTemplate="output">
-            {{ product.salesQ3 }}
-          </ng-template>
-        </p-cellEditor>
-      </td>
-      <td [pEditableColumn]="product.salesQ4" pEditableColumnField="salesQ4">
-        <p-cellEditor>
-          <ng-template pTemplate="input">
-            <p-inputNumber
-              [min]="0"
-              [max]="9999999999999"
-              [format]="false"
-              [(ngModel)]="product.salesQ4"
-              placeholder="Sales Q4"
-              [required]="true"
-            ></p-inputNumber>
-          </ng-template>
-          <ng-template pTemplate="output">
-            {{ product.salesQ4 }}
-          </ng-template>
-        </p-cellEditor>
-      </td>
-      <td>
-        <ng-container *ngIf="product.totalSales && product.totalSales > 0 && !shouldRecalculateTotals">{{
-          product.totalSales
-        }}</ng-container>
-        <ng-container *ngIf="!product.totalSales || product.totalSales <= 0 || shouldRecalculateTotals">
-          {{ computeTotalSales(product.salesQ1, product.salesQ2, product.salesQ3, product.salesQ4) }}
+      <ng-template ngFor let-col [ngForOf]="flattenedColumns">
+        <ng-container *ngIf="nonEditableColumns.includes(col.field); else editTemplate">
+          <td>
+            <ng-container *ngIf="col.field === 'totalSales'; else restColsTemplate">
+              <ng-container *ngIf="product.totalSales && product.totalSales > 0 && !shouldRecalculateTotals">{{
+                product.totalSales
+              }}</ng-container>
+              <ng-container *ngIf="!product.totalSales || product.totalSales <= 0 || shouldRecalculateTotals">
+                {{ computeTotalSales(product.salesQ1, product.salesQ2, product.salesQ3, product.salesQ4) }}
+              </ng-container>
+            </ng-container>
+            <ng-template #restColsTemplate>
+              {{ product[col.field] }}
+            </ng-template>
+          </td>
         </ng-container>
-      </td>
+        <ng-template #editTemplate>
+          <td [pEditableColumn]="product[col.field]" pEditableColumnField="col.field">
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <ng-container *ngIf="isNumericField(product[col.field]); else inputTextTemplate">
+                  <p-inputNumber
+                    [min]="0"
+                    [max]="9999999999999"
+                    [format]="false"
+                    [(ngModel)]="product[col.field]"
+                    [placeholder]="col.header"
+                    [required]="true"
+                  ></p-inputNumber>
+                </ng-container>
+                <ng-template #inputTextTemplate>
+                  <input
+                    [attr.placeholder]="col.header"
+                    pInputText
+                    type="text"
+                    maxlength="50"
+                    required
+                    [(ngModel)]="product[col.field]"
+                  />
+                </ng-template>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ product[col.field] }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+        </ng-template>
+      </ng-template>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">

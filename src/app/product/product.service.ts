@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, delay, of } from 'rxjs';
 import { DataService } from '../shared/data.service';
-import { Product, NewProduct, ProductSalesData } from '../models/product.model';
+import { Product, NewProduct } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +11,12 @@ export class ProductService {
   private columns$: BehaviorSubject<any[]>;
   private products: Product[] = [];
   private products$: BehaviorSubject<Product[]>;
-  private salesData: ProductSalesData[] = [];
-  private salesData$: BehaviorSubject<ProductSalesData[]>;
 
   constructor(private dataService: DataService) {
     this.dataService.potatoSalesData$.subscribe((data) => {
       if (data.length) {
-        this.salesData = data;
         this.products = data;
         this.products$.next(this.products);
-        this.salesData$.next(this.salesData);
       }
     });
     this.dataService.potatoSalesColumns$.subscribe((data) => {
@@ -31,7 +27,6 @@ export class ProductService {
     });
     this.columns$ = new BehaviorSubject<any[]>(this.columns);
     this.products$ = new BehaviorSubject<Product[]>(this.products);
-    this.salesData$ = new BehaviorSubject<ProductSalesData[]>(this.salesData);
   }
 
   // Getter for coluumns
@@ -46,7 +41,7 @@ export class ProductService {
 
   // Add new product
   addProduct(product: NewProduct): Observable<Product> {
-    let _product: Product = {
+    const _product: Product = {
       productID: product.productID,
       productName: product.productName,
       productManager: product.productManager,
@@ -59,12 +54,7 @@ export class ProductService {
     };
     this.products.push(_product);
     this.products$.next(this.products);
-    this.salesData$.next(this.products);
-    return of(_product).pipe(delay(1000));
-  }
-
-  // Getter for sales data
-  getSalesData() {
-    return this.salesData$.asObservable();
+    // add delay to simulate server response
+    return of(_product).pipe(delay(250));
   }
 }

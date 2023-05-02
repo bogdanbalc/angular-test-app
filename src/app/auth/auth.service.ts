@@ -5,18 +5,17 @@ import { Observable, delay, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
-
   // Mock login method
   login(username: string, password: string): Observable<boolean> {
     if (username === 'test' && password === 'test') {
       localStorage.setItem('isLoggedIn', 'true');
-
       // Return an Observable of true to indicate successful login
-      return of(true).pipe(delay(500));
+      // add a delay to simulate server response
+      return of(true).pipe(delay(250));
     } else {
       // Return an Observable of false to indicate failed login
-      return of(false).pipe(delay(500));
+      // add a delay to simulate server response
+      return of(false).pipe(delay(250));
     }
   }
 
