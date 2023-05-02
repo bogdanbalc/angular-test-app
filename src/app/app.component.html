@@ -1,0 +1,18 @@
+<div *ngIf="layout === 'default'; else elseBlock">
+  <p-menubar [model]="items" styleClass="mb-5">
+    <ng-template pTemplate="end">
+      <p-button (click)="logout()" styleClass="p-button-link">
+        <span class="logout-btn">Logout</span>
+      </p-button>
+    </ng-template>
+  </p-menubar>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div class="container h-100">
+    <router-outlet></router-outlet>
+  </div>
+</ng-template>

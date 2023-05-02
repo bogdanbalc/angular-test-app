@@ -1,0 +1,70 @@
+<h1 class="mb-5">New Product</h1>
+<form [formGroup]="newProductForm" (ngSubmit)="onSubmit()" class="col-8">
+  <div class="row mb-3">
+    <label for="productName" class="col-sm-3 col-form-label">Product Name:</label>
+    <div class="col-sm-9">
+      <input
+        type="text"
+        pInputText
+        id="productName"
+        formControlName="productName"
+        maxlength="50"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="productID" class="col-sm-3 col-form-label">Product ID:</label>
+    <div class="col-sm-9">
+      <p-inputNumber
+        inputId="productID"
+        formControlName="productID"
+        [min]="0"
+        [max]="9999999999999"
+        [format]="false"
+        inputStyleClass="form-control w-100"
+        styleClass="w-100"
+        class="w-100"
+      ></p-inputNumber>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="productManager" class="col-sm-3 col-form-label">Product Manager:</label>
+    <div class="col-sm-9">
+      <input
+        type="text"
+        pInputText
+        id="productManager"
+        formControlName="productManager"
+        maxlength="30"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="salesStartDate" class="col-sm-3 col-form-label">Sales start date:</label>
+    <div class="col-sm-9">
+      <p-calendar
+        inputId="salesStartDate"
+        formControlName="salesStartDate"
+        dateFormat="dd.mm.yy"
+        inputStyleClass="form-control w-100"
+        styleClass="w-100"
+        class="w-100"
+      ></p-calendar>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label class="col-sm-3 col-form-label"></label>
+    <div class="col-sm-9 d-flex align-items-center gap-3">
+      <p-button
+        type="submit"
+        [disabled]="!newProductForm.valid"
+        label="Submit"
+        [ngClass]="{ 'is-invalid': errorMessage }"
+      ></p-button>
+      <p-button type="button" label="Clear" (click)="newProductForm.reset()" styleClass="p-button-secondary"></p-button>
+      <span class="invalid-feedback">{{ errorMessage }}</span>
+    </div>
+  </div>
+</form>
