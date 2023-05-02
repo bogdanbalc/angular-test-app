@@ -62,7 +62,14 @@
       <td [pEditableColumn]="product.productName" pEditableColumnField="productName">
         <p-cellEditor>
           <ng-template pTemplate="input">
-            <input placeholder="Product Name" pInputText type="text" [(ngModel)]="product.productName" />
+            <input
+              placeholder="Product Name"
+              pInputText
+              type="text"
+              maxlength="50"
+              required
+              [(ngModel)]="product.productName"
+            />
           </ng-template>
           <ng-template pTemplate="output">
             {{ product.productName }}
@@ -78,6 +85,7 @@
               [format]="false"
               [(ngModel)]="product.salesQ1"
               placeholder="Sales Q1"
+              [required]="true"
             ></p-inputNumber>
           </ng-template>
           <ng-template pTemplate="output">
@@ -94,6 +102,7 @@
               [format]="false"
               [(ngModel)]="product.salesQ2"
               placeholder="Sales Q2"
+              [required]="true"
             ></p-inputNumber>
           </ng-template>
           <ng-template pTemplate="output">
@@ -110,6 +119,7 @@
               [format]="false"
               [(ngModel)]="product.salesQ3"
               placeholder="Sales Q3"
+              [required]="true"
             ></p-inputNumber>
           </ng-template>
           <ng-template pTemplate="output">
@@ -126,6 +136,7 @@
               [format]="false"
               [(ngModel)]="product.salesQ4"
               placeholder="Sales Q4"
+              [required]="true"
             ></p-inputNumber>
           </ng-template>
           <ng-template pTemplate="output">
@@ -138,7 +149,6 @@
           product.totalSales
         }}</ng-container>
         <ng-container *ngIf="!product.totalSales || product.totalSales <= 0 || shouldRecalculateTotals">
-          -
           {{ computeTotalSales(product.salesQ1, product.salesQ2, product.salesQ3, product.salesQ4) }}
         </ng-container>
       </td>
